@@ -6,7 +6,7 @@ const sio = new socketio.Server(PORT);
 
 sio.on(
   'connection',
-  (socket) =>
+  (socket: socketio.Socket) =>
   {
     console.log('Connection on port ' + PORT)
   }
