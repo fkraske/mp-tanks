@@ -4,8 +4,21 @@
   "description": "Multiplayer tank game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_PATH=out/ node out/main.js",
+    "build": "tsc -p .",
+    "dev": "nodemon --legacy-watch src/main.ts"
   },
   "author": "nGy",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.18",
+    "@types/socket.io": "^3.0.2",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4"
+  }
 }
