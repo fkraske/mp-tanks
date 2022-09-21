@@ -1,12 +1,12 @@
-import * as socketio from 'socket.io'
+import * as io from 'socket.io'
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
 
-const sio = new socketio.Server(PORT);
+const server = new io.Server(PORT);
 
-sio.on(
+server.on(
   'connection',
-  (socket: socketio.Socket) =>
+  (socket: io.Socket) =>
   {
     console.log('Connection on port ' + PORT)
   }
