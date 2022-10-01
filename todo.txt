@@ -1,0 +1,11 @@
+TODO
+Game simulation
+server logic
+  message processing
+  game loop
+client logic
+
+
+
+Proper namespace name for framework
+Proper namespace name for morphable
