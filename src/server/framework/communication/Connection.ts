@@ -1,32 +1,37 @@
-import { Chronology } from "../../../shared/framework/chronology/Chronology";
+import { TimeStamped } from "shared/framework/chronology/TimeStamped";
+import { ClientMessage, InputMessage } from "shared/framework/communication/messages";
+import { ID } from "shared/framework/id/ID";
+import { Time } from "shared/framework/simulation/Time";
 import { Socket } from "socket.io";
-import { Game } from "../../../shared/game/model/Game";
-import { Events, IOEvents } from "../../../shared/framework/communication/events";
+import { Chronology } from "../../../shared/framework/chronology/Chronology";
+import { IOEvents } from "../../../shared/framework/communication/events";
 import { Constants } from "../../../shared/game/constants";
-import { ClientMessage, InputMessage, Message } from "shared/framework/communication/messages";
-import { Morphable } from "shared/framework/morphable/Morphable";
+import { Game } from "../../../shared/game/state/Game";
 
-export abstract class Connection<T extends Morphable<T>> {
+export abstract class Connection {
   public constructor(
+    public readonly id: ID,
     public readonly socket: Socket,
     public readonly chronology: Chronology<Game>
   ) {
-    console.info('Connection on port ' + Constants.PORT)
+    chronology.addLeap(Time.current, game => game.addPlayer(this.id))
+    
+    console.info('Connection on port ' + Constants.PORT + '. Assigned id: ' + this.id)
     
     socket.on(
-      Events.MESSAGE,
-      (message: ClientMessage) => {
-        console.info('Received message: ' + message)
+      IOEvents.Custom.MESSAGE,
+      (message: TimeStamped<ClientMessage>) => {
+        console.info('Received message at: ' + message)
 
-        if (message !instanceof InputMessage)
+        if (message.value !instanceof InputMessage)
           return
         
-        this.handleInput(message)
+        this.handleInput(message.value as InputMessage)
       }
     )
 
     socket.on(
-      IOEvents.DISCONNECT,
+      IOEvents.Builtin.DISCONNECT,
       () => {
         console.info('Player disconnected')
       }

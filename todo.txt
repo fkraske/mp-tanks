@@ -1,11 +1,24 @@
 TODO
+!!!make MVP!!!
 Game simulation
 server logic
   message processing
   game loop
 client logic
+interpolation von nicht kontinuierlichen Werten
+advance: zwischenstopps
+id system for MorphableContainer and player tracking
+  id recycling
+  id pooling for players
+  free unused id pools
+  sync id pools server-client
+state caching
 
 
 
 Proper namespace name for framework
 Proper namespace name for morphable
+
+
+
+more performant copying for MorphableContainer
