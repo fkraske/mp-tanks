@@ -1,7 +1,6 @@
 import { TimeStamped } from "shared/framework/chronology/TimeStamped";
 import { ClientMessage, InputMessage } from "shared/framework/communication/messages";
 import { ID } from "shared/framework/id/ID";
-import { Time } from "shared/framework/simulation/Time";
 import { Socket } from "socket.io";
 import { Chronology } from "../../../shared/framework/chronology/Chronology";
 import { IOEvents } from "../../../shared/framework/communication/events";
@@ -14,8 +13,6 @@ export abstract class Connection {
     public readonly socket: Socket,
     public readonly chronology: Chronology<Game>
   ) {
-    chronology.addLeap(Time.current, game => game.addPlayer(this.id))
-    
     console.info('Connection on port ' + Constants.PORT + '. Assigned id: ' + this.id)
     
     socket.on(
