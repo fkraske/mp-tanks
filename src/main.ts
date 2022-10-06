@@ -7,7 +7,7 @@ import { IOEvents } from 'shared/framework/communication/events';
 import { AddLeapMessage, ClientMessage, InputMessage, RootUpdateMessage } from 'shared/framework/communication/messages';
 import { Time } from 'shared/framework/simulation/Time';
 import { MoveInputMessage, TurnInputMessage } from 'shared/game/communication/messages';
-import { Constants } from 'shared/game/constants';
+import * as Constants from 'server/constants'
 import { Game } from 'shared/game/state/Game';
 import { Server, Socket } from 'socket.io';
 
