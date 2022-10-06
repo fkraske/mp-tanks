@@ -1,5 +1,4 @@
 import assert = require('assert');
-import { TanksConnection } from 'server/game/communication/TanksConnection';
 import { Chronology } from 'shared/framework/chronology/Chronology';
 import { Leap } from 'shared/framework/chronology/Leap';
 import { Snapshot } from 'shared/framework/chronology/Snapshot';
