@@ -2,10 +2,10 @@
   "name": "mp-tanks",
   "version": "0.0.1",
   "description": "Multiplayer tank game",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_PATH=out/ node out/main.js",
+    "start": "node --es-module-specifier-resolution=node out/main.js",
     "build": "tsc -p .",
     "dev": "nodemon --legacy-watch src/main.ts"
   },

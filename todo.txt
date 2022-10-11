@@ -1,5 +1,6 @@
 TODO
 !!!make MVP!!!
+Figure out Serialization
 Game simulation
 server logic
   message processing

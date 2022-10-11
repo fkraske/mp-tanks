@@ -1,15 +1,14 @@
-import assert = require('assert');
-import * as Constants from 'server/constants';
-import { Chronology } from 'shared/framework/chronology/Chronology';
-import { Leap } from 'shared/framework/chronology/Leap';
-import { Snapshot } from 'shared/framework/chronology/Snapshot';
-import { TimeStamped } from 'shared/framework/chronology/TimeStamped';
-import { IOEvents } from 'shared/framework/communication/events';
-import { AddLeapMessage, ClientMessage, InputMessage, RootUpdateMessage } from 'shared/framework/communication/messages';
-import { Time } from 'shared/framework/simulation/Time';
-import { MoveInputMessage, TurnInputMessage } from 'shared/game/communication/messages';
-import { Game } from 'shared/game/state/Game';
 import { Server, Socket } from 'socket.io';
+import * as Constants from './server/constants';
+import { Chronology } from './shared/framework/chronology/Chronology';
+import { Leap } from './shared/framework/chronology/Leap';
+import { Snapshot } from './shared/framework/chronology/Snapshot';
+import { TimeStamped } from './shared/framework/chronology/TimeStamped';
+import { IOEvents } from './shared/framework/communication/events';
+import { AddLeapMessage, ClientMessage, InputMessage, RootUpdateMessage } from './shared/framework/communication/messages';
+import { Time } from './shared/framework/simulation/Time';
+import { MoveInputMessage, TurnInputMessage } from './shared/game/communication/messages';
+import { Game } from './shared/game/state/Game';
 
 const chronology = new Chronology<Game>(
   new Snapshot<Game>(
@@ -19,7 +18,6 @@ const chronology = new Chronology<Game>(
   Constants.CHRONOLOGY_DURATION
 )
 let players = 0
-
 
 
 const server = new Server(Constants.PORT);
