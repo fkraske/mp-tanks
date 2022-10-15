@@ -17,19 +17,26 @@ const chronology = new Chronology<Game>(
   ),
   Constants.CHRONOLOGY_DURATION
 )
-let players = 0
+let playerIDs = [1, 0]
 
-
-const server = new Server(Constants.PORT);
+const server = new Server(
+  Constants.PORT,
+  {
+    cors: {
+      origin: "http://localhost:5173" //TODO make port constant
+    }
+  }
+);
 server.on(
-  IOEvents.Builtin.CONNECTION,
+  IOEvents.Builtin.ESTABLISH_CONNECTION,
   (socket: Socket) => {
-    if (players > 1) {
-      socket.disconnect()
+    if (playerIDs.length == 0) {
+      socket.disconnect(true)
+      console.info('A third player\'s connection request was denied')
       return
     }
 
-    const id = players++
+    const id = playerIDs.pop()!
     const room = id.toString()
 
     socket.join(room)
@@ -39,8 +46,9 @@ server.on(
     socket.on(
       IOEvents.CUSTOM,
       (payload: TimeStamped<ClientMessage>) => {
-        console.info('Received message at: ' + payload)
+        console.info('Received message at: ' + payload.timeStamp)
 
+        /*
         const m = payload.value
 
         if (m! instanceof InputMessage)
@@ -67,14 +75,15 @@ server.on(
           IOEvents.CUSTOM,
           new AddLeapMessage(leap)
         )
+        */
       }
     )
 
     socket.on(
       IOEvents.Builtin.DISCONNECT,
       () => {
-        console.info('Player disconnected')
-        --players
+        console.info('Player with id ' + id + ' disconnected')
+        playerIDs.push(id)
       }
     )
   }
