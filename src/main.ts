@@ -43,7 +43,7 @@ server.on(
 
     socket.join(room)
     socket.emit(ServerEvents.CONNECTION_ID, id)
-    socket.emit(ServerEvents.UPDATE_ROOT, chronology.get(Time.current))
+    socket.emit(ServerEvents.INIT, chronology.get(Time.current))
 
     console.info('Connection on port ' + Constants.PORT + '. Assigned ID: ' + id)
 

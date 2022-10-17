@@ -17,17 +17,22 @@ export function registerClientEvent<T, E extends Morphable<E>>(
   socket.on(
     clientEvent.name,
     (message: T) => {
-      console.info('Received message \'' + clientEvent.name + '\' at: ' + Time.current)
+      setTimeout(
+        () => {
+          console.info('Received message \'' + clientEvent.name + '\' at: ' + Time.current)
 
-      if (!clientEvent.checkType(message)) {
-        console.warn('Received message is incomplete: ' + JSON.stringify(message))
-        return
-      }
+          if (!clientEvent.checkType(message)) {
+            console.warn('Received message is incomplete: ' + JSON.stringify(message))
+            return
+          }
 
-      chronology.addTimeStampedLeap(clientEvent.getTimeStampedLeap(connectionID, message))
-      server.except(room).emit(
-        clientEvent.name,
-        Object.assign({ connectionID: connectionID }, message)
+          chronology.addTimeStampedLeap(clientEvent.getTimeStampedLeap(connectionID, message))
+          server.except(room).emit(
+            clientEvent.name,
+            Object.assign({ connectionID: connectionID }, message)
+          )
+        },
+        100
       )
     }
   )
