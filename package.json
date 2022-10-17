@@ -5,7 +5,7 @@
   "main": "socket-server.js",
   "scripts": {
     "start": "pm2 start out/static-server.js && pm2 start out/socket-server.js",
-    "stop": "pm2 stop all",
+    "stop": "pm2 stop out/static-server.js && pm2 stop out/socket-server.js",
     "build": "tsc -p .",
     "dev": "nodemon --legacy-watch src/socket-server.ts"
   },
