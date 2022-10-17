@@ -6,7 +6,7 @@ import * as Constants from './server/constants'
 const app = express.default()
 
 app.use('/socket.io', (req, res) => {
-  req.pipe(request.default('localhost:' + Constants.SOCKET_IO_PORT + req.url)).pipe(res)
+  req.pipe(request.default(Constants.DOMAIN + ':' + Constants.SOCKET_IO_PORT + req.url)).pipe(res)
 })
 
 app.use(
