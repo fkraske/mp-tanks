@@ -3,12 +3,12 @@ import { Chronology } from '../../shared/framework/chronology/Chronology';
 import { Snapshot } from '../../shared/framework/chronology/Snapshot';
 import { TimeStamp } from '../../shared/framework/chronology/TimeStamp';
 import * as ServerEvents from '../../shared/framework/communication/server';
+import * as IOEvents from '../../shared/framework/communication/socket-io';
 import { Time } from '../../shared/framework/simulation/Time';
 import * as ClientEvents from '../../shared/game/communication/client';
 import { Game } from '../../shared/game/state/Game';
 import * as Constants from '../constants';
 import { registerClientEvent } from './events';
-import * as IOEvents from '../../shared/framework/communication/socket-io';
 
 export class Match {
   public constructor(
@@ -64,7 +64,6 @@ export class Match {
   }
 
   public sendClientUpdate() {
-    Time.update()
     const time = Time.frame - Constants.CHRONOLOGY_DURATION
     this.chronology.trim(time)
     this.server.in(this.room).emit(

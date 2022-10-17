@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import * as Constants from './server/constants';
 import { Match } from './server/framework/Match';
 import * as IOEvents from './shared/framework/communication/socket-io';
+import { Time } from './shared/framework/simulation/Time';
 
 
 
@@ -34,6 +35,7 @@ server.on(
 )
 
 function updateMatches() {
+  Time.update()
   matches = matches.filter(m => !m.empty)
   
   for (const m of matches)
