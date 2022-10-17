@@ -1,23 +1,22 @@
 import { Server, Socket } from 'socket.io';
 import * as Constants from './server/constants';
+import { registerClientEvent } from './server/framework/events';
 import { Chronology } from './shared/framework/chronology/Chronology';
-import { Leap } from './shared/framework/chronology/Leap';
 import { Snapshot } from './shared/framework/chronology/Snapshot';
-import { TimeStamped } from './shared/framework/chronology/TimeStamped';
-import { Input } from './shared/framework/communication/messages';
-import * as ServerEvents from './shared/framework/communication/server/events';
-import * as IOEvents from './shared/framework/communication/socket.io/events';
+import { TimeStamp } from './shared/framework/chronology/TimeStamp';
+import * as ServerEvents from './shared/framework/communication/server';
+import * as IOEvents from './shared/framework/communication/socket-io';
 import { Time } from './shared/framework/simulation/Time';
-import * as ClientEvents from './shared/game/communication/client/events';
-import { MoveInputMessage, TurnInputMessage } from './shared/game/communication/client/messages';
+import * as ClientEvents from './shared/game/communication/client';
 import { Game } from './shared/game/state/Game';
+
+
 
 const chronology = new Chronology<Game>(
   new Snapshot<Game>(
     Time.frame,
     new Game()
-  ),
-  Constants.CHRONOLOGY_DURATION
+  )
 )
 let playerIDs = [1, 0]
 
@@ -29,6 +28,7 @@ const server = new Server(
     }
   }
 );
+
 server.on(
   IOEvents.ESTABLISH_CONNECTION,
   (socket: Socket) => {
@@ -42,52 +42,20 @@ server.on(
     const room = id.toString()
 
     socket.join(room)
+    socket.emit(ServerEvents.CONNECTION_ID, id)
+    socket.emit(ServerEvents.UPDATE_ROOT, chronology.get(Time.current))
 
     console.info('Connection on port ' + Constants.PORT + '. Assigned ID: ' + id)
 
-    //TODO move the leap creation part to shared
-    //TODO generalize
-    //TODO move to abstract subclass for message registrators
-    function registerMessageType<T extends Input>(
-      socket: Socket,
-      event: string,
-      selector: (message: T) => any[] = (_) => [],
-      handler: (message: T) => Leap<Game>
-    ) {
-      socket.on(
-        event,
-        (message: T) => {
-          console.info('Received message at: ' + Time.current)
-
-          if (message.inputTime === undefined || selector(message).some(m => m === undefined)) {
-            console.warn('Received message is incomplete: ' + JSON.stringify(message))
-            return
-          }
-
-          let leap = new TimeStamped<Leap<Game>>(message.inputTime, handler(message))
-          chronology.addTimeStampedLeap(leap)
-          server.except(room).emit(
-            ServerEvents.LEAP,
-            { leap: leap }
-          )
-        }
+    for (const ev of ClientEvents.All)
+      registerClientEvent<{ inputTime: TimeStamp }, Game>(
+        server,
+        socket,
+        id,
+        chronology,
+        ev
       )
-    }
-
-    registerMessageType<MoveInputMessage>(
-      socket,
-      ClientEvents.INPUT_MOVE,
-      m => [m.directionState],
-      m => g => g.addPlayerMoveInput(id, m.directionState)
-    )
-
-    registerMessageType<TurnInputMessage>(
-      socket,
-      ClientEvents.INPUT_TURN,
-      m => [m.direction],
-      m => g => g.addPlayerTurnInput(id, m.direction)
-    )
-
+    
     socket.on(
       IOEvents.DISCONNECT,
       () => {
@@ -100,11 +68,12 @@ server.on(
 
 function updateConnections() {
   Time.update()
-
   server.emit(
     ServerEvents.UPDATE_ROOT,
-    { state: chronology.get(Time.frame) }
+    //TODO this is necessary to avoid overwriting client-side changes, that haven't
+    //made it to the server yet. Still bad, if the latency exceeds CHRONOLOGY_DURATION
+    chronology.get(Time.frame - Constants.CHRONOLOGY_DURATION)
   )
 }
 
-setInterval(updateConnections, Constants.TICK_RATE)
+setInterval(updateConnections, Constants.SERVER_TICK_RATE * 1000)
