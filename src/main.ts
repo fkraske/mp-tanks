@@ -68,11 +68,13 @@ server.on(
 
 function updateConnections() {
   Time.update()
+  const time = Time.frame - Constants.CHRONOLOGY_DURATION
+  chronology.trim(time)
   server.emit(
     ServerEvents.UPDATE_ROOT,
     //TODO this is necessary to avoid overwriting client-side changes, that haven't
     //made it to the server yet. Still bad, if the latency exceeds CHRONOLOGY_DURATION
-    chronology.get(Time.frame - Constants.CHRONOLOGY_DURATION)
+    chronology.get(time)
   )
 }
 
