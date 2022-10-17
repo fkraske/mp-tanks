@@ -2,22 +2,27 @@
   "name": "mp-tanks",
   "version": "0.0.1",
   "description": "Multiplayer tank game",
-  "main": "main.js",
+  "main": "socket-server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --es-module-specifier-resolution=node out/main.js",
+    "start": "pm2 start out/static-server.js && pm2 start out/socket-server.js",
+    "stop": "pm2 stop all",
     "build": "tsc -p .",
-    "dev": "nodemon --legacy-watch src/main.ts"
+    "dev": "nodemon --legacy-watch src/socket-server.ts"
   },
   "author": "nGy",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.18.2",
+    "request": "^2.88.2",
     "socket.io": "^4.5.2"
   },
   "devDependencies": {
+    "@types/express": "^4.17.14",
     "@types/node": "^18.7.18",
+    "@types/request": "^2.48.8",
     "@types/socket.io": "^3.0.2",
     "nodemon": "^2.0.20",
+    "pm2": "^5.2.2",
     "ts-node": "^10.9.1",
     "tsc": "^2.0.4",
     "typescript": "^4.8.4"

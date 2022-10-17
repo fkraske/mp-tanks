@@ -20,14 +20,7 @@ const chronology = new Chronology<Game>(
 )
 let playerIDs = [1, 0]
 
-const server = new Server(
-  Constants.PORT,
-  {
-    cors: {
-      origin: "http://localhost:8000" //TODO needs to be somewhere more sensible
-    }
-  }
-);
+const server = new Server(Constants.SOCKET_IO_PORT);
 
 server.on(
   IOEvents.ESTABLISH_CONNECTION,
@@ -45,7 +38,7 @@ server.on(
     socket.emit(ServerEvents.CONNECTION_ID, id)
     socket.emit(ServerEvents.INIT, chronology.get(Time.current))
 
-    console.info('Connection on port ' + Constants.PORT + '. Assigned ID: ' + id)
+    console.info('Connection on port ' + Constants.SOCKET_IO_PORT + '. Assigned ID: ' + id)
 
     for (const ev of ClientEvents.All)
       registerClientEvent<{ inputTime: TimeStamp }, Game>(
