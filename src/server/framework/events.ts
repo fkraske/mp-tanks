@@ -10,11 +10,11 @@ export function registerClientEvent<T, E extends Morphable<E>>(
   server: Server,
   socket: Socket,
   connectionID: ID,
+  matchRoom: string,
+  playerRoom: string,
   chronology: Chronology<E>,
   clientEvent: ClientEvent<T, E>
 ) {
-  const room = connectionID.toString()
-
   function handleEvent(payload: T) {
     console.info('Received message \'' + clientEvent.name + '\' at: ' + Time.current)
 
@@ -24,7 +24,7 @@ export function registerClientEvent<T, E extends Morphable<E>>(
     }
 
     chronology.addTimeStampedLeap(clientEvent.getTimeStampedLeap(connectionID, payload))
-    server.except(room).emit(
+    server.in(matchRoom).except(playerRoom).emit(
       clientEvent.name,
       Object.assign({ connectionID: connectionID }, payload)
     )
