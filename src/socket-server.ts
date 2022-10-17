@@ -20,7 +20,14 @@ const chronology = new Chronology<Game>(
 )
 let playerIDs = [1, 0]
 
-const server = new Server(Constants.SOCKET_IO_PORT);
+const server = new Server(
+  Constants.SOCKET_IO_PORT,
+  {
+    cors: {
+      origin: 'http://' + Constants.DOMAIN + ':' + Constants.STATIC_PORT
+    }
+  }
+);
 
 server.on(
   IOEvents.ESTABLISH_CONNECTION,
