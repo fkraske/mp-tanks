@@ -1,6 +1,5 @@
 TODO
-!!!make MVP!!!
-Figure out Serialization
+separate logic from model to prevent serialization issues
 Game simulation
 server logic
   message processing
