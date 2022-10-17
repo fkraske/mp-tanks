@@ -24,7 +24,7 @@ const server = new Server(
   Constants.PORT,
   {
     cors: {
-      origin: "http://localhost:5173" //TODO make port constant
+      origin: "http://localhost:8000" //TODO needs to be somewhere more sensible
     }
   }
 );

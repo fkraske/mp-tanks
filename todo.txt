@@ -1,24 +1,9 @@
 TODO
-separate logic from model to prevent serialization issues
-Game simulation
-server logic
-  message processing
-  game loop
-client logic
-interpolation von nicht kontinuierlichen Werten
-advance: zwischenstopps
-id system for MorphableContainer and player tracking
-  id recycling
-  id pooling for players
-  free unused id pools
-  sync id pools server-client
+proper build setup with docker
+multiple rooms
+morphablecontainer & id system rework:
+  ids are on strings with different subsections for room-player-object identification
+  containers are simple objects, which map ids to the desired type of object
+separate logic from model since serialization strips methods
 state caching
-
-
-
-Proper namespace name for framework
 Proper namespace name for morphable
-
-
-
-more performant copying for MorphableContainer

@@ -33,12 +33,12 @@ export function registerClientEvent<T, E extends Morphable<E>>(
   socket.on(
     clientEvent.name,
     (payload: T) => {
-      if (Constants.MOCK_DELAY as number === 0)
+      if (Constants.MOCK_LATENCY as number === 0)
         handleEvent(payload)
       else
         setTimeout(
           () => { handleEvent(payload) },
-          Constants.MOCK_DELAY * 1000
+          Constants.MOCK_LATENCY * 1000
         )
     }
   )
