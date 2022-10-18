@@ -1,4 +1,5 @@
 TODO
+send chronology during init
 proper build setup with docker
 multiple rooms
 morphablecontainer & id system rework:
