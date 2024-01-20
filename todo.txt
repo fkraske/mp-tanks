@@ -1,10 +1,12 @@
 TODO
+trim client-side chronology
 send chronology during init
+validate timestamps on incoming events on serverside
 proper build setup with docker
 multiple rooms
-morphablecontainer & id system rework:
-  ids are on strings with different subsections for room-player-object identification
-  containers are simple objects, which map ids to the desired type of object
+MorphableContainer:
+  maps composition of: creation event timestamp and creation event info (can be anonymous: doesn't have to be a chronology event), (state computation has to be 100% deterministic for float timestamps to match up)
+                   to: entity
 separate logic from model since serialization strips methods
 state caching
 Proper namespace name for morphable
